@@ -56,9 +56,9 @@ def open_file(filepath):
 
 
 #def chatbot(messages, model="gpt-4-0613", temperature=0):
-def chatbot(messages, model="gpt-3.5-turbo-0613", temperature=0):
-    openai.api_key = open_file('key_openai.txt')
-    max_retry = 7
+def chatbot(messages, model="gpt-3.5-turbo", temperature=0.7):
+    openai.api_key = open_file('key_openai.txt').strip()
+    max_retry = 4
     retry = 0
     while True:
         try:
@@ -77,8 +77,6 @@ def chatbot(messages, model="gpt-3.5-turbo-0613", temperature=0):
                 exit(1)
             print(f'\n\nRetrying in {2 ** (retry - 1) * 5} seconds...')
             sleep(2 ** (retry - 1) * 5)
-
-
 
 ###     KB functions
 
@@ -103,15 +101,24 @@ def search_kb(query):
     response, tokens = chatbot(messages)
     return json.loads(response)
 
+# def create_article_url(url):
+#     text = get_text_from_url(url)
 
-
-def create_article(text):
+def create_article(text=text, url=''):
+    # If url is specified, text value is ignored
+    source = 'user'
+    if url != '':
+        source = url
+        text = get_text_from_url(url)
     system = open_file('system_create.txt')
     messages = [{'role': 'system', 'content': system}, {'role': 'user', 'content': text}]
-    response, tokens = chatbot(messages)  # response should be JSON string
-    kb = json.loads(response)
-    save_yaml('kb/%s.yaml' % kb['title'], kb)
-    print('CREATE', kb['title'])
+    response, tokens = chatbot(messages)  # response will be Org Mode document string
+    # kb = json.loads(response)
+    # save_yaml('kb/%s.yaml' % kb['title'], kb)
+    extra_meta = '#+source: %s\n#+identifier: abcde\n#+created: [%s]\n' % (source, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    save_file('kb/%s.org' % str(uuid.uuid4()), extra_meta + response)
+    print('CREATE KB')
+    # print('CREATE', kb['title'])
 
 
 
