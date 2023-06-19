@@ -1,8 +1,13 @@
+# TODO: rewrite calls to model using functions API https://platform.openai.com/docs/api-reference/chat/create#chat/create-functions
+# TODO: integrate this with Denote notes (notes directory)
+# TODO: run denote file-renamer on newly-saved KB articles
 import os
+import datetime
 import flask
 import logging
 import json
 import yaml
+import orgparse
 import threading
 from flask import request
 import openai
