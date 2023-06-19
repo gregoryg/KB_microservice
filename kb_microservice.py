@@ -18,7 +18,8 @@ from time import time, sleep
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 app = flask.Flask('KB Articles')
-
+# use these models that show good results
+models = ['gpt-3.5-turbo', 'gpt-4', 'gpt-3.5-turbo-16k', 'gpt-4-32k']
 
 
 ###     file operations
