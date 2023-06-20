@@ -76,7 +76,7 @@ def get_text_from_url(url):
 
 
 #def chatbot(messages, model="gpt-4-0613", temperature=0):
-def chatbot(messages, model="gpt-3.5-turbo", temperature=0.7):
+def chatbot(messages, model="gpt-4", temperature=0.7):
     openai.api_key = open_file('key_openai.txt').strip()
     max_retry = 4
     retry = 0
@@ -84,7 +84,8 @@ def chatbot(messages, model="gpt-3.5-turbo", temperature=0.7):
         try:
             response = openai.ChatCompletion.create(model=model, messages=messages, temperature=temperature)
             text = response['choices'][0]['message']['content']
-            return text, response['usage']['total_tokens']
+            # response, tokens, model
+            return text, response['usage']['total_tokens'], model
         except Exception as oops:
             print(f'\n\nError communicating with OpenAI: "{oops}"')
             if 'maximum context length' in str(oops):
