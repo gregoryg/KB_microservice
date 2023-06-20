@@ -7,7 +7,7 @@ from pprint import pprint as pp
 def test_create_endpoint():
     text = input("Enter the text for the new KB article: ")
     payload = {"input": text}
-    response = requests.post("http://localhost:999/create", json=payload)
+    response = requests.post("http://localhost:8999/create", json=payload)
     print('\n\n\n', response.json())
 
 
@@ -15,7 +15,7 @@ def test_create_endpoint():
 def test_search_endpoint():
     query = input("Enter the search query: ")
     payload = {"query": query}
-    response = requests.post("http://localhost:999/search", json=payload)
+    response = requests.post("http://localhost:8999/search", json=payload)
     print('\n\n\n')
     pp(response.json())
 
@@ -25,7 +25,7 @@ def test_update_endpoint():
     title = input("Enter the title of the KB article to update: ")
     text = input("Enter the new text for the KB article: ")
     payload = {"title": title, "input": text}
-    response = requests.post("http://localhost:999/update", json=payload)
+    response = requests.post("http://localhost:8999/update", json=payload)
     print('\n\n\n', response.json())
 
 
