@@ -103,14 +103,15 @@ def chatbot(messages, model="gpt-4", temperature=0.7):
 
 
 
+
 def update_directory():
     kb_dir = 'kb/'
     directory = ''
     for filename in os.listdir(kb_dir):
-        if filename.endswith('.yaml'):
+        if filename.endswith('.org'):
             filepath = os.path.join(kb_dir, filename)
-            kb = open_yaml(filepath)
-            directory += '\n%s - %s - %s - %s\n' % (filename, kb['title'], kb['description'], kb['keywords'])
+            kb = orgparse.load(filepath)
+            directory += '\n%s - %s - %s - %s\n' % (filename, kb.get_file_property('title'), "<description>", ', '.join(kb.get_file_property_list('filetags')))
     save_file('directory.txt', directory.strip())
 
 
