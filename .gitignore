@@ -1,3 +1,5 @@
 key_openai.txt
 kb/*
 __pycache__/*
+src/
+**/*.org.html
