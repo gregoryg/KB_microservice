@@ -120,13 +120,13 @@ def search_kb(query):
     directory = open_file('directory.txt')
     system = open_file('system_search.txt').replace('<<DIRECTORY>>', directory)
     messages = [{'role': 'system', 'content': system}, {'role': 'user', 'content': query}]
-    response, tokens = chatbot(messages)
+    response, tokens, model = chatbot(messages)
     return json.loads(response)
 
 # def create_article_url(url):
 #     text = get_text_from_url(url)
 
-def create_article(text=text, url=''):
+def create_article(text='', url=''):
     # If url is specified, text value is ignored
     source = 'user'
     if url != '':
@@ -134,10 +134,8 @@ def create_article(text=text, url=''):
         text = get_text_from_url(url)
     system = open_file('system_create.txt')
     messages = [{'role': 'system', 'content': system}, {'role': 'user', 'content': text}]
-    response, tokens = chatbot(messages)  # response will be Org Mode document string
-    # kb = json.loads(response)
-    # save_yaml('kb/%s.yaml' % kb['title'], kb)
-    extra_meta = '#+source: %s\n#+identifier: abcde\n#+created: [%s]\n' % (source, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    response, tokens, model = chatbot(messages)  # response will be Org Mode document string
+    extra_meta = '#+source: %s\n#+identifier: abcde\n#+created: [%s]\n#+model: %s\n#+setupfile: ~/projects/emacs/org-html-themes/org/theme-readtheorg-local.setup\n' % (source, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), model)
     save_file('kb/%s.org' % str(uuid.uuid4()), extra_meta + response)
     print('CREATE KB')
     # print('CREATE', kb['title'])
