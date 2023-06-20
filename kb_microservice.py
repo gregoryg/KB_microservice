@@ -3,21 +3,20 @@
 # TODO: run denote file-renamer on newly-saved KB articles
 import os
 import datetime
-import flask
+import uuid
+from bs4 import BeautifulSoup
+import requests
 import logging
 import json
 import yaml
 import orgparse
 import threading
-from flask import request
 import openai
 from time import time, sleep
 
-
-
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
-app = flask.Flask('KB Articles')
+
 # use these models that show good results
 models = ['gpt-3.5-turbo', 'gpt-4', 'gpt-3.5-turbo-16k', 'gpt-4-32k']
 
@@ -131,42 +130,3 @@ def update_article(payload):
     kb = json.loads(response)
     save_yaml('kb/%s.yaml' % kb['title'], kb)
     print('UPDATE', kb['title'])
-
-
-
-###     flask routes
-
-
-
-@app.route('/search', methods=['post'])
-def search_endpoint():
-    update_directory()
-    payload = request.json  # payload should be {"query": "{query}"}
-    print(payload)
-    files = search_kb(payload['query'])  # this will always be a list of files, though it may be empty
-    result = list()
-    for f in files:
-        data = open_yaml(f'kb/{f}')
-        result.append(data)
-    return flask.Response(json.dumps(result), mimetype='application/json')
-
-
-
-@app.route('/create', methods=['post'])
-def create_endpoint():
-    payload = request.json  # payload should be {"input": "{text}"}
-    threading.Thread(target=create_article, args=(payload['input'],)).start()
-    return flask.Response(json.dumps({"status": "success"}), mimetype='application/json')
-
-
-
-@app.route('/update', methods=['post'])
-def update_endpoint():
-    payload = request.json  # payload should be {"title": "{KB title to update}", "input": "{text}"}
-    threading.Thread(target=update_article, args=(payload,)).start()
-    return flask.Response(json.dumps({"status": "success"}), mimetype='application/json')
-
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=999)
