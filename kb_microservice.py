@@ -48,6 +48,27 @@ def open_file(filepath):
     with open(filepath, 'r', encoding='utf-8', errors='ignore') as infile:
         return infile.read()
 
+def get_text_from_url(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Kill all script and style elements
+    for script in soup(["script", "style"]):
+        script.decompose()
+
+    # Get text
+    text = soup.get_text()
+
+    # Break into lines and remove leading and trailing spaces on each line
+    lines = (line.strip() for line in text.splitlines())
+
+    # Break multi-headlines into a line each
+    chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+
+    # Drop blank lines
+    text = '\n'.join(chunk for chunk in chunks if chunk)
+
+    return text
 
 
 ###     chatbot functions
