@@ -1,6 +1,7 @@
 # TODO: rewrite calls to model using functions API https://platform.openai.com/docs/api-reference/chat/create#chat/create-functions
 # TODO: integrate this with Denote notes (notes directory)
 # TODO: run denote file-renamer on newly-saved KB articles
+# TODO: read PDF from URL
 import os
 import datetime
 import uuid
@@ -75,8 +76,7 @@ def get_text_from_url(url):
 
 
 
-#def chatbot(messages, model="gpt-4-0613", temperature=0):
-def chatbot(messages, model="gpt-4", temperature=0.7):
+def chatbot(messages, model="gpt-4", temperature=0):
     openai.api_key = open_file('key_openai.txt').strip()
     max_retry = 4
     retry = 0
@@ -134,7 +134,7 @@ def create_article(text='', url=''):
         text = get_text_from_url(url)
     system = open_file('system_create.txt')
     messages = [{'role': 'system', 'content': system}, {'role': 'user', 'content': text}]
-    response, tokens, model = chatbot(messages)  # response will be Org Mode document string
+    response, tokens, model = chatbot(messages, model="gpt-4", temperature=0.5)  # response will be Org Mode document string
     extra_meta = '#+source: %s\n#+identifier: abcde\n#+created: [%s]\n#+model: %s\n#+setupfile: ~/projects/emacs/org-html-themes/org/theme-readtheorg-local.setup\n' % (source, datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), model)
     save_file('kb/%s.org' % str(uuid.uuid4()), extra_meta + response)
     print('CREATE KB')
