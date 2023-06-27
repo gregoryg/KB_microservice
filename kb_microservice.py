@@ -92,7 +92,7 @@ def update_directory():
         if filename.endswith('.org'):
             filepath = os.path.join(kb_dir, filename)
             kb = orgparse.load(filepath)
-            directory += '\n%s - %s - %s - %s\n' % (filename, kb.get_file_property('title'), "<description>", ', '.join(kb.get_file_property_list('filetags')))
+            directory += '\n%s - %s - %s - %s\n' % (filename, kb.get_file_property('title'), kb[1].body.lstrip('\n').split('\n')[0], ', '.join(kb.get_file_property_list('filetags')))
     save_file('directory.txt', directory.strip())
 
 
