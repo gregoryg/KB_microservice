@@ -3,3 +3,4 @@ kb/*
 __pycache__/*
 src/
 **/*.org.html
+directory.txt
