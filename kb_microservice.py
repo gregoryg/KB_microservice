@@ -107,7 +107,7 @@ def search_kb(query):
 # def create_article_url(url):
 #     text = get_text_from_url(url)
 
-def create_article(text='', url=''):
+def create_article(text='', url='', model='gpt-4', temperature=0):
     # If url is specified, text value is ignored
     source = 'user'
     if url != '':
