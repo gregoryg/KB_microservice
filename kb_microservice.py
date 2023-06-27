@@ -122,13 +122,13 @@ def create_article(text='', url='', model='gpt-4', temperature=0):
     # print('CREATE', kb['title'])
 
 
-
-def update_article(payload):
-    kb = open_yaml('kb/%s.yaml' % payload['title'])
-    json_str = json.dumps(kb, indent=2)
-    system = open_file('system_update.txt').replace('<<KB>>', json_str)
-    messages = [{'role': 'system', 'content': system}, {'role': 'user', 'content': payload['input']}]
-    response, tokens = chatbot(messages)  # response should be JSON string
-    kb = json.loads(response)
-    save_yaml('kb/%s.yaml' % kb['title'], kb)
-    print('UPDATE', kb['title'])
+# TODO: update update_article for org mode article
+# def update_article(payload):
+#     kb = open_yaml('kb/%s.yaml' % payload['title'])
+#     json_str = json.dumps(kb, indent=2)
+#     system = open_file('system_update.txt').replace('<<KB>>', json_str)
+#     messages = [{'role': 'system', 'content': system}, {'role': 'user', 'content': payload['input']}]
+#     response, tokens = chatbot(messages)  # response should be JSON string
+#     kb = json.loads(response)
+#     save_yaml('kb/%s.yaml' % kb['title'], kb)
+#     print('UPDATE', kb['title'])
