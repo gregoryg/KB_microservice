@@ -9,7 +9,6 @@ from bs4 import BeautifulSoup
 import requests
 import logging
 import json
-import yaml
 import orgparse
 import threading
 import openai
@@ -23,27 +22,9 @@ models = ['gpt-3.5-turbo', 'gpt-4', 'gpt-3.5-turbo-16k', 'gpt-4-32k']
 
 
 ###     file operations
-
-
-
-def save_yaml(filepath, data):
-    with open(filepath, 'w', encoding='utf-8') as file:
-        yaml.dump(data, file, allow_unicode=True)
-
-
-
-def open_yaml(filepath):
-    with open(filepath, 'r', encoding='utf-8') as file:
-        data = yaml.load(file, Loader=yaml.FullLoader)
-    return data
-
-
-
 def save_file(filepath, content):
     with open(filepath, 'w', encoding='utf-8') as outfile:
         outfile.write(content)
-
-
 
 def open_file(filepath):
     with open(filepath, 'r', encoding='utf-8', errors='ignore') as infile:
